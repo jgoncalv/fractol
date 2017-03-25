@@ -35,6 +35,7 @@ SRC_NAME = main.c\
 			julia.c\
 			pointerhook.c\
 			mousehook.c\
+			burningship.c
 
 INC = include/fractol.h
 

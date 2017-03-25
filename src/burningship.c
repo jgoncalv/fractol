@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mandelbrot.c                                       :+:      :+:    :+:   */
+/*   burningship.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgoncalv <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/15 18:33:34 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/03/15 18:33:35 by jgoncalv         ###   ########.fr       */
+/*   Created: 2017/03/25 19:34:20 by jgoncalv          #+#    #+#             */
+/*   Updated: 2017/03/25 19:34:21 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-static void	mandelbrot_norme(t_calc *cc, t_env *e)
+static void	burningship_norme(t_calc *cc, t_env *e)
 {
 	while (cc->z_r * cc->z_r + cc->z_i * cc->z_i < 4 && cc->i < cc->i_max)
 	{
 		cc->tmp = cc->z_r;
-		cc->z_r = cc->z_r * cc->z_r - cc->z_i * cc->z_i + cc->c_r;
-		cc->z_i = 2 * cc->z_i * cc->tmp + cc->c_i;
+		cc->z_r = fabs(cc->z_r * cc->z_r - cc->z_i * cc->z_i + cc->c_r);
+		cc->z_i = fabs(2 * cc->z_i * cc->tmp + cc->c_i);
 		cc->i++;
 	}
 	if (cc->i == cc->i_max)
@@ -28,7 +28,7 @@ static void	mandelbrot_norme(t_calc *cc, t_env *e)
 			0xE8B71A * (e->color / (double)cc->i));
 }
 
-void		mandelbrot(t_env *e)
+void		burningship(t_env *e)
 {
 	t_calc	cc;
 
@@ -43,10 +43,10 @@ void		mandelbrot(t_env *e)
 		{
 			cc.c_r = cc.x / cc.zoom_x + e->x1;
 			cc.c_i = cc.y / cc.zoom_y + e->y1;
-			cc.z_r = 0 + e->p_coefx;
-			cc.z_i = 0 + e->p_coefy;
+			cc.z_r = 0;
+			cc.z_i = 0;
 			cc.i = 0;
-			mandelbrot_norme(&cc, e);
+			burningship_norme(&cc, e);
 			cc.y++;
 		}
 		cc.x++;

@@ -28,6 +28,14 @@ static void	init_julia(t_env *e)
 	e->y2 = 1.2;
 }
 
+static void	init_burningship(t_env *e)
+{
+	e->x1 = -2;
+	e->x2 = 1.5;
+	e->y1 = -2;
+	e->y2 = 1.5;
+}
+
 void		fractal_init(t_env *e)
 {
 	e->p_coefx = 0;
@@ -42,15 +50,18 @@ void		fractal_init(t_env *e)
 		init_mandelbrot(e);
 	else if (e->id == 2)
 		init_julia(e);
+	else if (e->id == 3)
+		init_burningship(e);
 }
 
 void		fractal(int id)
 {
 	t_env	e;
-	char	*name[2];
+	char	*name[3];
 
 	name[0] = "Mandelbrot";
 	name[1] = "Julia";
+	name[2] = "BurningShip";
 	e.mlx = mlx_init();
 	e.win = mlx_new_window(e.mlx, WIN_W, WIN_H, name[id - 1]);
 	e.id = id;

@@ -13,7 +13,7 @@
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
-# define USAGE "USAGE : ./fractol <fractal>\nmandelbrot / julia\n"
+# define USAGE "USAGE: ./fractol <fractal><..>\nmandelbrot/julia/burningship\n"
 # define WIN_H 500
 # define WIN_W 500
 # define LIMIT_MAX 10000
@@ -22,6 +22,7 @@
 # include <mlx.h>
 # include "libft.h"
 # include </System/Library/Frameworks/Tk.framework/Versions/8.5/Headers/X11/X.h>
+# include <math.h>
 
 typedef struct	s_env
 {
@@ -33,7 +34,7 @@ typedef struct	s_env
 	double		p_coefx;
 	double		p_coefy;
 	int			iteration;
-	double		color;
+	int			color;
 	double		x1;
 	double		x2;
 	double		y1;
@@ -70,5 +71,6 @@ void			julia(t_env *e);
 int				pointerhook(int x, int y, t_env *e);
 void			fractal_init(t_env *e);
 int				mousehook(int mousecode, int x, int y, t_env *e);
+void			burningship(t_env *e);
 
 #endif

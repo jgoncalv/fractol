@@ -12,31 +12,37 @@
 
 #include "fractol.h"
 
-static void	move_arrow(int keycode, t_env *e)
+static void	move_arrow1(int keycode, t_env *e)
 {
-	if (keycode == 125 && (e->y1 > LIMIT_MIN
-		&& e->y2 > LIMIT_MIN))
+	double plus;
+
+	plus = (e->x2 - e->x1) / 20;
+	if (keycode == 124)
 	{
-		e->y1 -= 0.1;
-		e->y2 -= 0.1;
+		e->x1 -= plus;
+		e->x2 -= plus;
 	}
-	if (keycode == 126 && (e->y1 < LIMIT_MAX
-		&& e->y2 < LIMIT_MAX))
+	if (keycode == 123)
 	{
-		e->y1 += 0.1;
-		e->y2 += 0.1;
+		e->x1 += plus;
+		e->x2 += plus;
 	}
-	if (keycode == 124 && e->x1 > LIMIT_MIN
-		&& e->x2 > LIMIT_MIN)
+}
+
+static void	move_arrow2(int keycode, t_env *e)
+{
+	double plus;
+
+	plus = (e->y2 - e->y1) / 20;
+	if (keycode == 125)
 	{
-		e->x1 -= 0.1;
-		e->x2 -= 0.1;
+		e->y1 -= plus;
+		e->y2 -= plus;
 	}
-	if (keycode == 123 && e->x1 < LIMIT_MAX
-		&& e->x2 < LIMIT_MAX)
+	if (keycode == 126)
 	{
-		e->x1 += 0.1;
-		e->x2 += 0.1;
+		e->y1 += plus;
+		e->y2 += plus;
 	}
 }
 
@@ -83,16 +89,17 @@ int			keyhook(int keycode, t_env *e)
 	if (keycode == 49)
 		e->pause = (e->pause == 0 ? 1 : 0);
 	if (keycode == 8)
-		e->color++;
+		e->color = (e->color + 1) % 256;
 	if (keycode == 15)
 		fractal_init(e);
 	if (keycode == 116 || keycode == 121)
 		zoom(keycode, e);
 	if (keycode == 69 || keycode == 78)
 		iteration(keycode, e);
-	if (keycode == 124 || keycode == 123 ||
-	keycode == 125 || keycode == 126)
-		move_arrow(keycode, e);
+	if (keycode == 124 || keycode == 123)
+		move_arrow1(keycode, e);
+	if (keycode == 125 || keycode == 126)
+		move_arrow2(keycode, e);
 	if (keycode == 46)
 		e->menu = e->menu == 0 ? 1 : 0;
 	expose(e);

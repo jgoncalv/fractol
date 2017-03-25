@@ -18,6 +18,8 @@ static int	check_fractal_name(char *str)
 		return (1);
 	if (ft_strcmp(str, "julia") == 0)
 		return (2);
+	if (ft_strcmp(str, "burningship") == 0)
+		return (3);
 	return (0);
 }
 

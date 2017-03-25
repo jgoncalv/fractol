@@ -31,6 +31,8 @@ int		expose(t_env *e)
 		mandelbrot(e);
 	else if (e->id == 2)
 		julia(e);
+	else if (e->id == 3)
+		burningship(e);
 	mlx_put_image_to_window(e->mlx, e->win, e->img, 0, 0);
 	if (e->pause == 1)
 		mlx_string_put(e->mlx, e->win, 20, 10, 0xFF0000, "Pause");
@@ -38,7 +40,7 @@ int		expose(t_env *e)
 		mlx_string_put(e->mlx, e->win, 10, 470, 0xFFFFFF, "Menu : m");
 	if (e->menu == 1)
 	{
-		mlx_string_put(e->mlx, e->win, 10, 350, 0xFFFFFF, "Move : arrow");
+		mlx_string_put(e->mlx, e->win, 10, 330, 0xFFFFFF, "Move : arrow");
 		mlx_string_put(e->mlx, e->win, 10, 350, 0xFFFFFF, "Iteration : +/-");
 		mlx_string_put(e->mlx, e->win, 10, 370, 0xFFFFFF, "Color : c");
 		mlx_string_put(e->mlx, e->win, 10, 390, 0xFFFFFF, "Reset : r");
