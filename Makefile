@@ -10,77 +10,67 @@
 #                                                                              #
 # **************************************************************************** #
 
-.PHONY: all, clean, fclean, re
+NAME		=	fractol
 
-NAME = fractol
+CC			=	gcc
+FLAGS		=	-Wall -Wextra -Werror -g
 
-CC = gcc
+LIBFT_DIR	=	libft/
+LIBFT_LIB	=	$(LIBFT_DIR)libft.a
+LIBFT_INC	=	$(LIBFT_DIR)includes/
 
-CFLAGS = -Wall -Wextra -Werror -g -Ofast
+SRC_DIR		=	srcs/
+INC_DIR		=	includes/
+OBJ_DIR		=	objs/
 
-LIB = libft
-LIB_A = $(LIB)/libft.a
+LIBMLX 		=	-lmlx -framework OpenGL -framework AppKit
 
-LDFLAGS = -Llibft
+SRC_FILE = main.c\
+fractal.c\
+mlx.c\
+keyhook.c\
+mandelbrot.c\
+julia.c\
+pointerhook.c\
+mousehook.c\
+burningship.c
 
-LDLIBS = -lft -lmlx -framework OpenGL -framework AppKit
+SRCS		=	$(addprefix $(SRC_DIR), $(SRC_FILE))
+OBJS		=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))
 
-SRC_PATH = src
+all:			$(NAME)
 
-SRC_NAME = main.c\
-			fractal.c\
-			mlx.c\
-			keyhook.c\
-			mandelbrot.c\
-			julia.c\
-			pointerhook.c\
-			mousehook.c\
-			burningship.c
+$(NAME):		$(LIBFT_LIB) $(OBJ_DIR) $(OBJS)
+	@$(CC) $(FLAGS) -I $(INC_DIR) -I $(LIBFT_INC)\
+	 $(LIBFT_LIB) $(LIBMLX) $(OBJS) -o $(NAME)
 
-INC = include/fractol.h
+$(LIBFT_LIB):
+	@make -j -C $(LIBFT_DIR)
 
-AR = ar rc
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(dir $(OBJS))
 
-INC_LIB = -I libft/include
+$(OBJ_DIR)%.o:	$(SRC_DIR)%.c | $(OBJ_DIR)
+	@$(CC) $(FLAGS) -MMD -c $< -o $@ -I $(INC_DIR) -I $(LIBFT_INC)
 
-CPPFLAGS = -I include
+clean:			cleanlib
+	@rm -rf $(OBJ_DIR)
 
-OBJ_PATH = obj
+cleanlib:
+	@make -C $(LIBFT_DIR) clean
 
-OBJ_NAME = $(SRC_NAME:.c=.o)
-
-SRC = $(addprefix $(SRC_PATH)/,$(SRC_NAME))
-
-OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
-
-all: makefile $(INC) $(LIB_A) $(NAME)
-
-$(LIB_A):
-	@make -C $(LIB)
-
-$(NAME): $(OBJ)
-	@echo $(NAME) ": Sources compiling..."
-	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
-	@echo "Executable "$(NAME)" made"
-
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
-	@mkdir -p $(OBJ_PATH) 2> /dev/null || true
-	@mkdir -p $(dir $(OBJ)) 2> /dev/null || true
-	@$(CC) $(CFLAGS) $(CPPFLAGS) $(INC_LIB) -o $@ -c $<
-
-clean:
-	@make fclean -C $(LIB)
-	@rm -f $(OBJ)
-	@rm -rf $(OBJ_PATH) || true
-	@echo $(OBJ_PATH)" supprimé !"
-
-fclean: clean
+fclean:			clean fcleanlib
 	@rm -f $(NAME)
-	@echo "Executable de "$(NAME)" supprimé !"
 
-re: fclean all
-	@echo "Make re done !"
+fcleanlib:		cleanlib
+	@make -C $(LIBFT_DIR) fclean
 
-norme:
-	norminette $(SRC)
-	norminette $(INC_PATH)
+re:				fclean all
+
+relib:			fcleanlib $(LIBFT_LIB)
+
+.PHONY:			fclean clean re relib cleanlib fcleanlib
+
+-include $(OBJS:.o=.d)
+
